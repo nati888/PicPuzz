@@ -1,4 +1,4 @@
-package il.ac.hit.PicPuzz;
+package il.ac.hit.picpuzz;
 
 import android.content.Context;
 import android.content.res.AssetManager;

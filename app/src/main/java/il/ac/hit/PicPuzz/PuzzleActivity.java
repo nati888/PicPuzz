@@ -1,4 +1,4 @@
-package il.ac.hit.PicPuzz;
+package il.ac.hit.picpuzz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
