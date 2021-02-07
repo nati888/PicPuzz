@@ -1,6 +1,7 @@
 package il.ac.hit.picpuzz;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,14 +22,12 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private AssetManager am;
     private String[] files;
-    private int minImageIndex;
-    private int maxImageIndex;
+    SharedPreferences prefs;
 
     public ImageAdapter(Context c, int min, int max) {
         mContext = c;
         am = mContext.getAssets();
-        minImageIndex = min;
-        maxImageIndex = max;
+        prefs = mContext.getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
 
         try {
             files = Arrays.copyOfRange(am.list("img"),min-1,max-1);
@@ -65,9 +64,11 @@ public class ImageAdapter extends BaseAdapter {
             public void run() {
                 new AsyncTask<Void, Void, Void>() {
                     private Bitmap bitmap;
+                    private String fileName;
                     @Override
                     protected Void doInBackground(Void... voids) {
                         bitmap = getPicFromAsset(imageView, files[position]);
+                        fileName = files[position];
                         return null;
                     }
 
@@ -75,6 +76,11 @@ public class ImageAdapter extends BaseAdapter {
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
                         imageView.setImageBitmap(bitmap);
+
+                        // if puzzle wasn't finished show blank image
+                        if(prefs.getBoolean(fileName, false) == false)
+                            imageView.setAlpha((float) 0.0);
+
                     }
                 }.execute();
             }
@@ -110,7 +116,6 @@ public class ImageAdapter extends BaseAdapter {
             // Decode the image file into a Bitmap sized to fill the View
             bmOptions.inJustDecodeBounds = false;
             bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
 
             return BitmapFactory.decodeStream(is, new Rect(-1, -1, -1, -1), bmOptions);
         } catch (IOException e) {
