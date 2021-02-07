@@ -16,6 +16,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -30,20 +33,22 @@ import static java.lang.Math.abs;
 
 public class PuzzleActivity extends AppCompatActivity {
     ArrayList<PuzzlePiece> pieces;
-
+    private boolean isChecked = false;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
 
         final RelativeLayout layout = findViewById(R.id.rel_layout);
-        final ImageView imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
         Intent intent = getIntent();
         final String assetName = intent.getStringExtra("assetName");
         final int piecesNum = intent.getIntExtra("pieces", 9);
         final int rows = intent.getIntExtra("rows", 3);
         final int columns = intent.getIntExtra("columns", 3);
+
 
         // run image related code after the view was laid out
         // to have all dimensions calculated
@@ -68,6 +73,38 @@ public class PuzzleActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem checkable = menu.findItem(R.id.checkable_menu);
+        checkable.setChecked(isChecked);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.checkable_menu:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                if(isChecked) {
+                    imageView.setAlpha((float) 0.3);
+                } else {
+                    imageView.setAlpha((float) 0.0);
+                }
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void setPicFromAsset(String assetName, ImageView imageView) {
