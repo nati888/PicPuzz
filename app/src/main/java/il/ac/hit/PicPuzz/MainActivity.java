@@ -11,9 +11,14 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     GridView grid;
+    int piecesNum = 9;
+    int rows = 3;
+    int columns = 3;
+    String[] files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +27,54 @@ public class MainActivity extends AppCompatActivity {
 
         AssetManager am = getAssets();
         try {
-            final String[] files  = am.list("img");
+            //files = am.list("img");
+
 
             grid = findViewById(R.id.grid);
-            grid.setAdapter(new ImageAdapter(this));
+
+            Intent intent = getIntent();
+            int level = intent.getIntExtra("level", 1);
+            switch (level) {
+                case 1:
+                    grid.setAdapter(new ImageAdapter(this, 1, 26));
+                    files = Arrays.copyOfRange(am.list("img"),0,25);
+                    break;
+                case 2:
+                    grid.setAdapter(new ImageAdapter(this, 26, 51));
+                    files = Arrays.copyOfRange(am.list("img"),25,52);
+                    piecesNum = 12;
+                    rows = 4;
+                    columns = 3;
+                    break;
+                case 3:
+                    grid.setAdapter(new ImageAdapter(this, 51, 76));
+                    files = Arrays.copyOfRange(am.list("img"),50,77);
+                    piecesNum = 16;
+                    rows = 4;
+                    columns = 4;
+                    break;
+                case 4:
+                    grid.setAdapter(new ImageAdapter(this, 76, 101));
+                    files = Arrays.copyOfRange(am.list("img"),75,102);
+                    piecesNum = 20;
+                    rows = 5;
+                    columns = 4;
+                    break;
+
+                default:
+                    grid.setAdapter(new ImageAdapter(this, 1, 2));
+                    files = Arrays.copyOfRange(am.list("img"),0,1);
+                    break;
+            }
 
             grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getApplicationContext(), PuzzleActivity.class);
                     intent.putExtra("assetName", files[position % files.length]);
+                    intent.putExtra("pieces", piecesNum);
+                    intent.putExtra("rows", rows);
+                    intent.putExtra("columns", columns);
                     startActivity(intent);
                 }
             });

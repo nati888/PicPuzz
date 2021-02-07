@@ -30,6 +30,7 @@ import static java.lang.Math.abs;
 
 public class PuzzleActivity extends AppCompatActivity {
     ArrayList<PuzzlePiece> pieces;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,9 @@ public class PuzzleActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final String assetName = intent.getStringExtra("assetName");
+        final int piecesNum = intent.getIntExtra("pieces", 9);
+        final int rows = intent.getIntExtra("rows", 3);
+        final int columns = intent.getIntExtra("columns", 3);
 
         // run image related code after the view was laid out
         // to have all dimensions calculated
@@ -49,7 +53,7 @@ public class PuzzleActivity extends AppCompatActivity {
                 if (assetName != null)
                     setPicFromAsset(assetName, imageView);
 
-                pieces = splitImage();
+                pieces = splitImage(piecesNum, rows, columns);
                 TouchListener touchListener = new TouchListener(PuzzleActivity.this);
                 // shuffle pieces order
                 Collections.shuffle(pieces);
@@ -99,10 +103,10 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<PuzzlePiece> splitImage() {
-        int piecesNumber = 12;
-        int rows = 4;
-        int cols = 3;
+    private ArrayList<PuzzlePiece> splitImage(int piecesNum, int r, int c) {
+        int piecesNumber = piecesNum;
+        int rows = r;
+        int cols = c;
 
         ImageView imageView = findViewById(R.id.imageView);
         ArrayList<PuzzlePiece> pieces = new ArrayList<>(piecesNumber);

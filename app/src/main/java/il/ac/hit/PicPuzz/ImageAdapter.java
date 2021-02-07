@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +15,24 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private AssetManager am;
     private String[] files;
+    private int minImageIndex;
+    private int maxImageIndex;
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, int min, int max) {
         mContext = c;
         am = mContext.getAssets();
+        minImageIndex = min;
+        maxImageIndex = max;
+
         try {
-            files  = am.list("img");
+            files = Arrays.copyOfRange(am.list("img"),min-1,max-1);
+            Log.d("ImageAdapter", Arrays.toString(files) + "");
         } catch (IOException e) {
             e.printStackTrace();
         }
