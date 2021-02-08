@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pic&amp;Puzz</string>
+    <string name="levels">רמות</string>
+    <string name="level_easy">קל</string>
+    <string name="level_normal">בינוני</string>
+    <string name="level_hard">קשה</string>
+    <string name="level_extreme">אקסטרים</string>
+    <string name="level_custom">משחק פשוט</string>
+    <string name="hint_background">הראה רקע</string>
+    <string name="music_mute">השתק קול</string>
+    <string name="music_unmute">השמיע קול</string>
+    <string name="reset_progress">אתחל התקדמות</string>
+</resources>

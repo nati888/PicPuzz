@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,22 +30,9 @@ public class ImageAdapter extends BaseAdapter {
 
         try {
             files = Arrays.copyOfRange(am.list("img"),min-1,max-1);
-            Log.d("ImageAdapter", Arrays.toString(files) + "");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public int getCount() {
-        return files.length;
-    }
-
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public long getItemId(int position) {
-        return 0;
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -58,17 +44,16 @@ public class ImageAdapter extends BaseAdapter {
 
         final ImageView imageView = convertView.findViewById(R.id.gridImageview);
         imageView.setImageBitmap(null);
-        // run image related code after the view was laid out
+
         imageView.post(new Runnable() {
             @Override
             public void run() {
                 new AsyncTask<Void, Void, Void>() {
                     private Bitmap bitmap;
-                    private String fileName;
+
                     @Override
                     protected Void doInBackground(Void... voids) {
                         bitmap = getPicFromAsset(imageView, files[position]);
-                        fileName = files[position];
                         return null;
                     }
 
@@ -78,14 +63,17 @@ public class ImageAdapter extends BaseAdapter {
                         imageView.setImageBitmap(bitmap);
 
                         // if puzzle wasn't finished show blank image
-                        if(prefs.getBoolean(fileName, false) == false)
-                            imageView.setAlpha((float) 0.0);
+                        if(!prefs.getBoolean(files[position], false))
+                            imageView.setImageResource(R.drawable.undiscovered);
+                        else
+                            imageView.setImageBitmap(bitmap);
 
                     }
                 }.execute();
             }
         });
 
+        //new LoadImage(imageView, position).execute();
         return convertView;
     }
 
@@ -123,5 +111,17 @@ public class ImageAdapter extends BaseAdapter {
 
             return null;
         }
+    }
+
+    public int getCount() {
+        return files.length;
+    }
+
+    public Object getItem(int position) {
+        return null;
+    }
+
+    public long getItemId(int position) {
+        return 0;
     }
 }
