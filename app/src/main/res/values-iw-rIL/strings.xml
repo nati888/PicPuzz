@@ -6,9 +6,11 @@
     <string name="level_normal">בינוני</string>
     <string name="level_hard">קשה</string>
     <string name="level_extreme">אקסטרים</string>
-    <string name="level_custom">משחק פשוט</string>
+    <string name="level_custom">מותאם</string>
     <string name="hint_background">הראה רקע</string>
     <string name="music_mute">השתק קול</string>
     <string name="music_unmute">השמיע קול</string>
     <string name="reset_progress">אתחל התקדמות</string>
+    <string name="lightning_round">סיבוב הבזק</string>
+    <string name="free_style">סיבוב חופשי</string>
 </resources>

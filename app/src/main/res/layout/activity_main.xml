@@ -6,8 +6,16 @@
     android:background="@drawable/table_background"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:weightSum="8">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="5">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,50 +23,55 @@
         android:gravity="center"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        style="@style/CustomText"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical">
 
-        <Button
+
+
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/easy"
             android:layout_margin="5dp"
             android:text="@string/level_easy"
             android:textSize="18sp"
-            android:id="@+id/b_easy"/>
+            android:id="@+id/b_easy"
+            android:background="@drawable/round_btns"
+            style="@style/CustomText"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/normal"
             android:layout_margin="5dp"
             android:text="@string/level_normal"
             android:textSize="18sp"
-            android:id="@+id/b_normal"/>
+            android:id="@+id/b_normal"
+            android:background="@drawable/round_btns"
+            style="@style/CustomText"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/hard"
             android:layout_margin="5dp"
             android:text="@string/level_hard"
             android:textSize="18sp"
-            android:id="@+id/b_hard"/>
+            android:id="@+id/b_hard"
+            android:background="@drawable/round_btns"
+            style="@style/CustomText"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/extreme"
             android:layout_margin="5dp"
             android:text="@string/level_extreme"
             android:textSize="18sp"
-            android:id="@+id/b_extreme"/>
+            android:id="@+id/b_extreme"
+            android:background="@drawable/round_btns"
+            style="@style/CustomText"/>
 
     </LinearLayout>
 
@@ -68,45 +81,64 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="100dp"
+        android:layout_weight="1">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/teal_700"
             android:layout_margin="5dp"
             android:textSize="18sp"
-            android:text="@string/level_custom"
-            android:id="@+id/b_custom"/>
+            android:text="@string/lightning_round"
+            android:id="@+id/b_custom"
+            android:background="@drawable/round_btns"
+            style="@style/CustomText"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="end|bottom"
+        android:gravity="right"
         android:layout_marginEnd="25dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginBottom="25dp"
+
+
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:weightSum="2"
+        >
+<!--        android:layout_marginTop="30dp"-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/galleryButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+
             android:clickable="true"
             android:onClick="onImageFromGalleryClick"
             android:src="@drawable/ic_baseline_image_24"
             android:tint="@android:color/white"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            />
+<!--        android:layout_marginEnd="10dp"-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/cameraButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onImageFromCameraClick"
+            android:focusable="true"
             android:src="@drawable/ic_baseline_photo_camera_24"
-            android:focusable="true"/>
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:layout_marginLeft="6dp"
+            />
 
     </LinearLayout>
 

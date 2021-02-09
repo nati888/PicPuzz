@@ -10,4 +10,6 @@
     <string name="music_mute">Mute music</string>
     <string name="music_unmute">Unmute music</string>
     <string name="reset_progress">Reset progress</string>
+    <string name="lightning_round">Lightning round</string>
+    <string name="free_style">Free syle</string>
 </resources>

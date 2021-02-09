@@ -1,8 +1,10 @@
 package il.ac.hit.picpuzz;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -17,7 +19,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.exifinterface.media.ExifInterface;
+
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -393,7 +396,18 @@ public class PuzzleActivity extends AppCompatActivity {
         if (isGameOver()) {
             keyValues.putBoolean(picture, true); //"001.jpg"
             keyValues.apply();
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
+            builder.setMessage("Congratulations!!!");
+            builder.setCancelable(false);
+            builder.setPositiveButton(
+                    "Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
 
 //            Intent intent = new Intent(getApplicationContext(), GridActivity.class);
 //            startActivity(intent);
@@ -408,5 +422,33 @@ public class PuzzleActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    //make sure you want to exit dialog
+    // Declare the onBackPressed method
+    // when the back button is pressed
+    // this method will call
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
+        builder.setMessage("Are you sure you want to exit ?");
+        builder.setTitle("Alert !");
+        builder.setCancelable(false);
+        builder.setPositiveButton(
+                "Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(
+                "No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
