@@ -23,14 +23,6 @@ public class GridActivity extends AppCompatActivity {
     private int maxPicIndex = 26;
     private String[] files;
     private AssetManager am;
-
-    GridView grid;
-    int piecesNum = 9;
-    int rows = 3;
-    int minPicIndex = 1;
-    int maxPicIndex = 26;
-    String[] files;
-    AssetManager am;
     SharedPreferences prefs;
     private boolean continueMusic = true;
 
