@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Pic&amp;Puzz</string>
     <string name="levels">רמות</string>
     <string name="level_easy">קל</string>
     <string name="level_normal">בינוני</string>

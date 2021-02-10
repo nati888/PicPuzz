@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -393,9 +395,11 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     public void checkGameOver(String picture) {
+        LottieAnimationView fireworks = findViewById(R.id.fireworks_anim);
         if (isGameOver()) {
             keyValues.putBoolean(picture, true); //"001.jpg"
             keyValues.apply();
+            fireworks.playAnimation();
             AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
             builder.setMessage("Congratulations!!!");
             builder.setCancelable(false);
@@ -408,6 +412,7 @@ public class PuzzleActivity extends AppCompatActivity {
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
+
 
 //            Intent intent = new Intent(getApplicationContext(), GridActivity.class);
 //            startActivity(intent);

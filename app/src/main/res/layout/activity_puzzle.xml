@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".PuzzleActivity"
     android:id="@+id/layout"
-    android:background="@drawable/table_background"
+    android:background="@drawable/wooden_background"
     android:layoutDirection="ltr">
 
     <ImageView
@@ -51,5 +51,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
     </RelativeLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:lottie_loop="false"
+        app:lottie_fileName="fireworks.json"
+        android:id="@+id/fireworks_anim">
+
+    </com.airbnb.lottie.LottieAnimationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

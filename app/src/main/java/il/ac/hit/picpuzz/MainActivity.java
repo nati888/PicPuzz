@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button b_normal;
     Button b_hard;
     Button b_extreme;
-    Button b_custom;
+    //Button b_custom;
     Intent intent;
 
     String mCurrentPhotoPath;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         b_normal = findViewById(R.id.b_normal);
         b_hard = findViewById(R.id.b_hard);
         b_extreme = findViewById(R.id.b_extreme);
-        b_custom = findViewById(R.id.b_custom);
+        //b_custom = findViewById(R.id.b_custom);
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         showProgress();
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         b_normal.setText(getResources().getText(R.string.level_normal) + " (" + normal + "/25)");
         b_hard.setText(getResources().getText(R.string.level_hard) + " ("+ hard + "/25)");
         b_extreme.setText(getResources().getText(R.string.level_extreme) + " ("+ extreme + "/25)");
-        b_custom.setText(getResources().getText(R.string.level_custom));
+        //b_custom.setText(getResources().getText(R.string.level_custom));
     }
 
     public void showLevelImages(int level) {

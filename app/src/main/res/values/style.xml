@@ -4,6 +4,5 @@
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">#fff</item>
         <item name="android:textStyle">bold|italic</item>
-
     </style>
 </resources>

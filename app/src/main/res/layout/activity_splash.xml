@@ -7,23 +7,29 @@
     android:orientation="vertical"
     tools:context=".SplashActivity"
     android:weightSum="3"
-    android:background="#4e89ae">
+    android:background="@color/easy">
 
-    <ImageView
-        android:id="@+id/img_logo"
-        android:layout_width="wrap_content"
+
+
+    <com.airbnb.lottie.LottieAnimationView
+
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/app_logo" />
+        app:lottie_loop="false"
+        app:lottie_fileName="puzzle.json"
+        app:lottie_autoPlay="true"
+        android:id="@+id/puzzle_anim"
+        android:layout_margin="15dp">
+
+    </com.airbnb.lottie.LottieAnimationView>
 
     <TextView
         android:id="@+id/name_logo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="2"
-        android:fontFamily="@font/caveat_brush"
+        android:fontFamily="@font/bubblegum_sans"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="@color/white"
