@@ -3,8 +3,11 @@ package il.ac.hit.picpuzz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -12,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class GridActivity extends AppCompatActivity {
+
     private GridView grid;
     private int piecesNum = 9;
     private int rows = 3;
@@ -19,6 +23,17 @@ public class GridActivity extends AppCompatActivity {
     private int maxPicIndex = 26;
     private String[] files;
     private AssetManager am;
+
+    GridView grid;
+    int piecesNum = 9;
+    int rows = 3;
+    int minPicIndex = 1;
+    int maxPicIndex = 26;
+    String[] files;
+    AssetManager am;
+    SharedPreferences prefs;
+    private boolean continueMusic = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +60,23 @@ public class GridActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!continueMusic) {
+            MusicManager.pause();
+        }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == 4) {
+            continueMusic = true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     void prepareImages() throws IOException {
@@ -87,7 +119,8 @@ public class GridActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        continueMusic = false;
+        MusicManager.start(this, MusicManager.MUSIC_MENU);
         try {
             prepareImages();
         } catch (IOException e) {

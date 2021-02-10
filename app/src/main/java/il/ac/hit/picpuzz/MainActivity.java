@@ -7,14 +7,17 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private Button b_custom;
     private Intent intent;
     private TextView highscore;
+    private boolean continueMusic = true;
+
+
 
     private String mCurrentPhotoPath;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         showProgress();
+
 
         b_easy.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(1); }});
         b_normal.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(2); }});
@@ -92,9 +99,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (!continueMusic) {
+            MusicManager.pause();
+        }
+    }
+
+
+    @Override
     protected void onResume() {
         super.onResume();
         showProgress();
+        continueMusic = false;
+        MusicManager.start(this, MusicManager.MUSIC_MENU);
     }
 
     public void showProgress() {

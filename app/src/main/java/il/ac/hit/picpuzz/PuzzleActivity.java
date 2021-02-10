@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private String mCurrentPhotoUri;
     private RelativeLayout layout;
+    private boolean continueMusic = true;
 
     private int piecesNum;
     private int rows;
@@ -113,6 +115,28 @@ public class PuzzleActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!continueMusic) {
+            MusicManager.pause();
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        continueMusic = false;
+        MusicManager.start(this, MusicManager.MUSIC_MENU);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == 4) {
+            continueMusic = true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void setPicFromPath(String mCurrentPhotoPath, ImageView imageView) {
