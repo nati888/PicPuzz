@@ -18,10 +18,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
-    private AssetManager am;
+    private final Context mContext;
+    private final AssetManager am;
     private String[] files;
-    SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     public ImageAdapter(Context c, int min, int max) {
         mContext = c;

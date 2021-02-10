@@ -4,11 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -20,17 +18,14 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -46,8 +41,8 @@ import java.util.Random;
 import static java.lang.Math.abs;
 
 public class PuzzleActivity extends AppCompatActivity {
-    private final int FIREWORKS_DELAY = 2000;
-    private final float ALPHA_VALUE = 0.3f;
+    private int FIREWORKS_DELAY = 2000;
+    private float ALPHA_VALUE = 0.3f;
     private ArrayList<PuzzlePiece> pieces;
     private boolean isChecked = false;
     private boolean lightning_mode = false;
@@ -415,13 +410,10 @@ public class PuzzleActivity extends AppCompatActivity {
         LottieAnimationView fireworks = findViewById(R.id.fireworks_anim);
         if (isGameOver()) {
 
-            if(lightning_mode) {
-                long elapsedTimeMillis = System.currentTimeMillis() - lightning_time;
-                String formatted_highscore = (elapsedTimeMillis/(60*1000F)) + ":" + elapsedTimeMillis/1000F;
-                keyValues.putString("highscore", formatted_highscore);
-            } else {
+            if(lightning_mode)
+                keyValues.putString("highscore", formattedDate((System.currentTimeMillis() - lightning_time)/1000));
+            else
                 keyValues.putBoolean(picture, true);
-            }
 
             keyValues.apply();
 
@@ -433,6 +425,23 @@ public class PuzzleActivity extends AppCompatActivity {
                 }
             }, FIREWORKS_DELAY);
         }
+    }
+
+    public String formattedDate(long elapsedTimeMillis) {
+        String formatted_highscore;
+        int minutes = (int) (elapsedTimeMillis / 60);
+        int seconds = (int) (elapsedTimeMillis - minutes*60);
+        if(minutes < 10)
+            formatted_highscore = "0" + minutes +":";
+        else
+            formatted_highscore = minutes + ":";
+
+        if(seconds < 10)
+            formatted_highscore += "0" + seconds;
+        else
+            formatted_highscore += seconds;
+
+        return formatted_highscore;
     }
 
     private boolean isGameOver() {

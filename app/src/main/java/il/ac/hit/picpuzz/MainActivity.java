@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 3;
     private static final int REQUEST_IMAGE_GALLERY = 4;
 
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), PuzzleActivity.class);
                     String[] files = am.list("img");
                     files = Arrays.copyOfRange(files, randImg, randImg+1);
-                    Log.d("MY_APP", files + "");
 
                     intent.putExtra("assetName", files[0]);
                     intent.putExtra("pieces", 20);
@@ -109,18 +106,18 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 1; i < 101; i++) {
             if(i < 10)
-                currentFile = "00" + i + ".jpg"; //"001.jpg"
+                currentFile = "00" + i + ".jpg";
             else
                 currentFile = "0" + i + ".jpg";
 
             if(prefs.getBoolean(currentFile, false)) {
-                if(i >= 1 && i <= 25)
+                if(i <= 25)
                     easy++;
                 else if(i >= 26 && i <= 50)
                     normal++;
                 else if(i >= 51 && i <= 75)
                     hard++;
-                else if(i >= 76 && i <= 100)
+                else if(i >= 76)
                     extreme++;
             }
         }
@@ -131,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         b_extreme.setText(getResources().getText(R.string.level_extreme) + " ("+ extreme + "/25)");
 
         if(prefs.getString("highscore", "") != "") {
-            highscore.setText("Best time: " + prefs.getString("highscore", ""));
+            highscore.setText(getResources().getText(R.string.lightning_highscore) + prefs.getString("highscore", ""));
         }
     }
 

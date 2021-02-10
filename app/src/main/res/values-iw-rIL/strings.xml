@@ -16,4 +16,5 @@
     <string name="exit_dialog_title">שים לב!</string>
     <string name="exit_dialog_yes">כן</string>
     <string name="exit_dialog_no">לא</string>
+    <string name="lightning_highscore">"זמן הכי מהיר: "</string>
 </resources>

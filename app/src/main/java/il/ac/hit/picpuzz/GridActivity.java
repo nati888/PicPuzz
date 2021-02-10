@@ -2,12 +2,9 @@ package il.ac.hit.picpuzz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -15,20 +12,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class GridActivity extends AppCompatActivity {
-    GridView grid;
-    int piecesNum = 9;
-    int rows = 3;
-    int minPicIndex = 1;
-    int maxPicIndex = 26;
-    String[] files;
-    AssetManager am;
-    SharedPreferences prefs;
+    private GridView grid;
+    private int piecesNum = 9;
+    private int rows = 3;
+    private int minPicIndex = 1;
+    private int maxPicIndex = 26;
+    private String[] files;
+    private AssetManager am;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
-        prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
+
         grid = findViewById(R.id.grid);
         am = getAssets();
 
@@ -85,7 +81,7 @@ public class GridActivity extends AppCompatActivity {
         }
 
         grid.setAdapter(new ImageAdapter(this, minPicIndex, maxPicIndex));
-        files = Arrays.copyOfRange(am.list("img"),minPicIndex-1,maxPicIndex-1);
+        files = Arrays.copyOfRange(am.list("img"),minPicIndex - 1,maxPicIndex - 1);
     }
 
     @Override

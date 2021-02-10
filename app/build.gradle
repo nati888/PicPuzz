@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "il.ac.hit.pazell"
+        applicationId "il.ac.hit.picpuzz"
         minSdkVersion 23
         targetSdkVersion 23
         versionCode 1

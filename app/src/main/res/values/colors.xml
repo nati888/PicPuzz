@@ -8,8 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="easy">#54878f</color>
-    <color name="normal">#54878f</color>
-    <color name="hard">#54878f</color>
-    <color name="extreme">#54878f</color>
+    <color name="easy">#A6A6A9</color>
+    <color name="normal">#016A4B</color>
+    <color name="hard">#D6895D</color>
+    <color name="extreme">#A43138</color>
+    <color name="main_buttons">#11698e</color>
 </resources>

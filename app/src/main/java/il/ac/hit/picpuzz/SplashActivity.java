@@ -1,6 +1,5 @@
 package il.ac.hit.picpuzz;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +7,13 @@ import android.os.Handler;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
 public class SplashActivity extends Activity {
     private int SPLASH_SCREEN = 2300;
-    private Animation topAnim, botAnim;
+    private Animation botAnim;
     private LottieAnimationView puzzAnim;
     private TextView logo;
 
@@ -25,7 +23,6 @@ public class SplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
 
-        topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         botAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         puzzAnim = findViewById(R.id.puzzle_anim);
         puzzAnim.setSpeed(2);
