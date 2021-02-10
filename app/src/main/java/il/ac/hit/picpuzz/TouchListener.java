@@ -1,8 +1,5 @@
 package il.ac.hit.picpuzz;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +12,8 @@ import static java.lang.Math.pow;
 public class TouchListener implements View.OnTouchListener {
     private float xDelta;
     private float yDelta;
-    private PuzzleActivity activity;
-    private String picName;
+    private final PuzzleActivity activity;
+    private final String picName;
 
     public TouchListener(PuzzleActivity activity, String picName) {
         this.activity = activity;

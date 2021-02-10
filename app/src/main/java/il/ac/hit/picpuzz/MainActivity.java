@@ -11,30 +11,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    Button b_easy;
-    Button b_normal;
-    Button b_hard;
-    Button b_extreme;
-    //Button b_custom;
-    Intent intent;
+    private Button b_easy;
+    private Button b_normal;
+    private Button b_hard;
+    private Button b_extreme;
+    private Button b_custom;
+    private Intent intent;
+    private TextView highscore;
 
-    String mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 3;
@@ -51,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         b_normal = findViewById(R.id.b_normal);
         b_hard = findViewById(R.id.b_hard);
         b_extreme = findViewById(R.id.b_extreme);
-        //b_custom = findViewById(R.id.b_custom);
+        b_custom = findViewById(R.id.b_custom);
+        highscore = findViewById(R.id.tv_highscore);
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         showProgress();
@@ -60,6 +67,31 @@ public class MainActivity extends AppCompatActivity {
         b_normal.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(2); }});
         b_hard.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(3); }});
         b_extreme.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(4); }});
+        b_custom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Random r = new Random();
+                int randImg = r.nextInt(100 - 1) + 1;
+                AssetManager am;
+                am = getAssets();
+
+                try {
+                    Intent intent = new Intent(getApplicationContext(), PuzzleActivity.class);
+                    String[] files = am.list("img");
+                    files = Arrays.copyOfRange(files, randImg, randImg+1);
+                    Log.d("MY_APP", files + "");
+
+                    intent.putExtra("assetName", files[0]);
+                    intent.putExtra("pieces", 20);
+                    intent.putExtra("rows", 5);
+                    intent.putExtra("columns", 4);
+                    intent.putExtra("lightning_mode", true);
+                    startActivity(intent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -97,7 +129,10 @@ public class MainActivity extends AppCompatActivity {
         b_normal.setText(getResources().getText(R.string.level_normal) + " (" + normal + "/25)");
         b_hard.setText(getResources().getText(R.string.level_hard) + " ("+ hard + "/25)");
         b_extreme.setText(getResources().getText(R.string.level_extreme) + " ("+ extreme + "/25)");
-        //b_custom.setText(getResources().getText(R.string.level_custom));
+
+        if(prefs.getString("highscore", "") != "") {
+            highscore.setText("Best time: " + prefs.getString("highscore", ""));
+        }
     }
 
     public void showLevelImages(int level) {

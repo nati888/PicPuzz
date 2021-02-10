@@ -9,7 +9,6 @@
     android:layoutDirection="ltr"
     android:weightSum="8">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +16,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_weight="5">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,9 +26,6 @@
         android:layout_marginBottom="10dp"
         android:textSize="30sp"
         style="@style/CustomText"/>
-
-
-
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"
@@ -82,8 +79,17 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            style="@style/CustomText"
+            android:id="@+id/tv_highscore"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="200dp"

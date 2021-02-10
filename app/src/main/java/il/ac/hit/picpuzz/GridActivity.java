@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -29,7 +30,6 @@ public class GridActivity extends AppCompatActivity {
         setContentView(R.layout.activity_grid);
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         grid = findViewById(R.id.grid);
-
         am = getAssets();
 
         try {

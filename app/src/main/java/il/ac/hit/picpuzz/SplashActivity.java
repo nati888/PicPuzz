@@ -14,11 +14,10 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 
 public class SplashActivity extends Activity {
-    public static int SPLASH_SCREEN = 2300;
-    Animation topAnim, botAnim;
-    LottieAnimationView puzzAnim;
-    ImageView image;
-    TextView logo;
+    private int SPLASH_SCREEN = 2300;
+    private Animation topAnim, botAnim;
+    private LottieAnimationView puzzAnim;
+    private TextView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +30,8 @@ public class SplashActivity extends Activity {
         puzzAnim = findViewById(R.id.puzzle_anim);
         puzzAnim.setSpeed(2);
 
-        //image = findViewById(R.id.img_logo);
         logo = findViewById(R.id.name_logo);
-
-        //image.setAnimation(topAnim);
         logo.setAnimation(botAnim);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

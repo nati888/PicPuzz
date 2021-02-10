@@ -12,4 +12,8 @@
     <string name="reset_progress">Reset progress</string>
     <string name="lightning_round">Lightning round</string>
     <string name="free_style">Free syle</string>
+    <string name="exit_dialog_body">Are you sure you want to exit?</string>
+    <string name="exit_dialog_title">Warning!</string>
+    <string name="exit_dialog_yes">Yes</string>
+    <string name="exit_dialog_no">No</string>
 </resources>

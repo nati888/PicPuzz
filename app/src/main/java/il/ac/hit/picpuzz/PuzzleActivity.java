@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -24,6 +25,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,31 +46,42 @@ import java.util.Random;
 import static java.lang.Math.abs;
 
 public class PuzzleActivity extends AppCompatActivity {
-    ArrayList<PuzzlePiece> pieces;
+    private final int FIREWORKS_DELAY = 2000;
+    private final float ALPHA_VALUE = 0.3f;
+    private ArrayList<PuzzlePiece> pieces;
     private boolean isChecked = false;
-    ImageView imageView;
-    String mCurrentPhotoPath;
-    String mCurrentPhotoUri;
+    private boolean lightning_mode = false;
+    private long lightning_time;
+    private ImageView imageView;
+    private String assetName;
+    private String mCurrentPhotoPath;
+    private String mCurrentPhotoUri;
+    private RelativeLayout layout;
 
-    SharedPreferences prefs;
-    SharedPreferences.Editor keyValues;
+    private int piecesNum;
+    private int rows;
+    private int columns;
+
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor keyValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
 
-        final RelativeLayout layout = findViewById(R.id.rel_layout);
+        layout = findViewById(R.id.rel_layout);
         imageView = findViewById(R.id.imageView);
 
         Intent intent = getIntent();
-        String assetName = intent.getStringExtra("assetName");
+        assetName = intent.getStringExtra("assetName");
         mCurrentPhotoPath = intent.getStringExtra("mCurrentPhotoPath");
         mCurrentPhotoUri = intent.getStringExtra("mCurrentPhotoUri");
 
-        int piecesNum = intent.getIntExtra("pieces", 9);
-        int rows = intent.getIntExtra("rows", 3);
-        int columns = intent.getIntExtra("columns", 3);
+        piecesNum = intent.getIntExtra("pieces", 9);
+        rows = intent.getIntExtra("rows", 3);
+        columns = intent.getIntExtra("columns", 3);
+        lightning_mode = intent.getBooleanExtra("lightning_mode", false);
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         keyValues = getSharedPreferences("APPLICATION_PREFERENCE", MODE_PRIVATE).edit();
@@ -87,6 +101,9 @@ public class PuzzleActivity extends AppCompatActivity {
 
                 pieces = splitImage(piecesNum, rows, columns);
                 TouchListener touchListener = new TouchListener(PuzzleActivity.this, assetName);
+                if(lightning_mode) {
+                    lightning_time = System.currentTimeMillis();
+                }
 
                 // shuffle pieces order
                 Collections.shuffle(pieces);
@@ -162,8 +179,10 @@ public class PuzzleActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem checkable = menu.findItem(R.id.checkable_background);
-        checkable.setChecked(isChecked);
+        menu.findItem(R.id.checkable_background).setChecked(isChecked);
+
+        if(lightning_mode)
+            menu.findItem(R.id.checkable_background).setEnabled(false);
         return true;
     }
 
@@ -174,9 +193,9 @@ public class PuzzleActivity extends AppCompatActivity {
             item.setChecked(isChecked);
 
             if (isChecked)
-                imageView.setAlpha((float) 0.3);
+                imageView.setAlpha(ALPHA_VALUE);
             else
-                imageView.setAlpha((float) 0.0);
+                imageView.setAlpha(0f);
 
             return true;
         } else if (item.getItemId() == R.id.checkable_mute) {
@@ -206,7 +225,6 @@ public class PuzzleActivity extends AppCompatActivity {
 
             // Determine how much to scale down the image
             int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
             is.reset();
 
             // Decode the image file into a Bitmap sized to fill the View
@@ -317,7 +335,6 @@ public class PuzzleActivity extends AppCompatActivity {
                     path.close();
                 }
 
-
                 // mask the piece
                 Paint paint = new Paint();
                 paint.setColor(0XFF000000);
@@ -397,25 +414,24 @@ public class PuzzleActivity extends AppCompatActivity {
     public void checkGameOver(String picture) {
         LottieAnimationView fireworks = findViewById(R.id.fireworks_anim);
         if (isGameOver()) {
-            keyValues.putBoolean(picture, true); //"001.jpg"
+
+            if(lightning_mode) {
+                long elapsedTimeMillis = System.currentTimeMillis() - lightning_time;
+                String formatted_highscore = (elapsedTimeMillis/(60*1000F)) + ":" + elapsedTimeMillis/1000F;
+                keyValues.putString("highscore", formatted_highscore);
+            } else {
+                keyValues.putBoolean(picture, true);
+            }
+
             keyValues.apply();
+
             fireworks.playAnimation();
-            AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
-            builder.setMessage("Congratulations!!!");
-            builder.setCancelable(false);
-            builder.setPositiveButton(
-                    "Continue", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-
-//            Intent intent = new Intent(getApplicationContext(), GridActivity.class);
-//            startActivity(intent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            }, FIREWORKS_DELAY);
         }
     }
 
@@ -429,30 +445,20 @@ public class PuzzleActivity extends AppCompatActivity {
         return true;
     }
 
-    //make sure you want to exit dialog
+    // make sure you want to exit dialog
     // Declare the onBackPressed method
     // when the back button is pressed
     // this method will call
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
-        builder.setMessage("Are you sure you want to exit ?");
-        builder.setTitle("Alert !");
+        builder.setMessage(getResources().getString(R.string.exit_dialog_body));
+        builder.setTitle(getResources().getString(R.string.exit_dialog_title));
         builder.setCancelable(false);
-        builder.setPositiveButton(
-                "Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-        builder.setNegativeButton(
-                "No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+
+        builder.setPositiveButton(getResources().getString(R.string.exit_dialog_yes), (dialog, which) -> finish());
+        builder.setNegativeButton(getResources().getString(R.string.exit_dialog_no), (dialog, which) -> dialog.cancel());
+
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

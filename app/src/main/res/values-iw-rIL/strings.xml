@@ -10,6 +10,10 @@
     <string name="music_mute">השתק קול</string>
     <string name="music_unmute">השמיע קול</string>
     <string name="reset_progress">אתחל התקדמות</string>
-    <string name="lightning_round">סיבוב הבזק</string>
+    <string name="lightning_round">סיבוב בזק</string>
     <string name="free_style">סיבוב חופשי</string>
+    <string name="exit_dialog_body">האם אתם בטוחים שברצונכם לצאת?</string>
+    <string name="exit_dialog_title">שים לב!</string>
+    <string name="exit_dialog_yes">כן</string>
+    <string name="exit_dialog_no">לא</string>
 </resources>
