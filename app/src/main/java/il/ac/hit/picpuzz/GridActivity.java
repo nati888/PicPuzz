@@ -22,7 +22,7 @@ public class GridActivity extends AppCompatActivity {
     private int maxPicIndex = 26;
     private String[] files;
     private AssetManager am;
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

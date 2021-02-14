@@ -17,4 +17,5 @@
     <string name="exit_dialog_yes">כן</string>
     <string name="exit_dialog_no">לא</string>
     <string name="lightning_highscore">"זמן הכי מהיר: "</string>
+    <string name="app_name" translatable="false">פיקפז</string>
 </resources>

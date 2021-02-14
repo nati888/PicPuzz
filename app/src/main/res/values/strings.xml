@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PicPuzz</string>
+    <string name="app_name">PicPuzz</string>
     <string name="levels">Levels</string>
     <string name="level_easy">Easy</string>
     <string name="level_normal">Normal</string>
