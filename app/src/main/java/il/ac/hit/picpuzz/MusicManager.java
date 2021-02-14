@@ -20,20 +20,13 @@ public class MusicManager {
     private static int currentMusic = -1;
     private static int previousMusic = -1;
 
-    /*public static float getMusicVolume(Context context) {
-        String[] volumes = context.getResources().getStringArray(R.array.volume_values);
-        String volumeString = PreferenceManager.getDefaultSharedPreferences(context).getString(
-                context.getString(R.string.key_pref_music_volume), volumes[PREF_DEFAULT_MUSIC_VOLUME_ITEM]);
-        return new Float(volumeString).floatValue();
-    }*/
-
     public static void start(Context context, int music) {
         start(context, music, false);
     }
 
     public static void start(Context context, int music, boolean force) {
         if (!force && currentMusic > -1) {
-// already playing some music and not forced to change
+            // already playing some music and not forced to change
             return;
         }
         if (music == MUSIC_PREVIOUS) {
@@ -41,13 +34,13 @@ public class MusicManager {
             music = previousMusic;
         }
         if (currentMusic == music) {
-// already playing this music
+            // already playing this music
             return;
         }
         if (currentMusic != -1) {
             previousMusic = currentMusic;
             Log.d(TAG, "Previous music was [" + previousMusic + "]");
-// playing some other music, pause it and change
+            // playing some other music, pause it and change
             pause();
         }
         currentMusic = music;
@@ -95,7 +88,7 @@ public class MusicManager {
                 p.pause();
             }
         }
-// previousMusic should always be something valid
+        // previousMusic should always be something valid
         if (currentMusic != -1) {
             previousMusic = currentMusic;
             Log.d(TAG, "Previous music was [" + previousMusic + "]");
