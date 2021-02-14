@@ -9,8 +9,9 @@
 
     <item
         android:title="@string/music_mute"
-        app:showAsAction="never"
-        android:id="@+id/checkable_mute"/>
+        android:checkable="true"
+        android:id="@+id/checkable_mute"
+        />
     <item
         android:title="@string/reset_progress"
         app:showAsAction="never"

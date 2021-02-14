@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +18,13 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView highscore;
     private boolean continueMusic = true;
 
+    private Animation scaleUp;
+    private Animation scaleDown;
+
 
 
     private String mCurrentPhotoPath;
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,16 +72,98 @@ public class MainActivity extends AppCompatActivity {
         b_extreme = findViewById(R.id.b_extreme);
         b_custom = findViewById(R.id.b_custom);
         highscore = findViewById(R.id.tv_highscore);
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         showProgress();
 
 
-        b_easy.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(1); }});
-        b_normal.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(2); }});
-        b_hard.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(3); }});
-        b_extreme.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { showLevelImages(4); }});
-        b_custom.setOnClickListener(new View.OnClickListener() {
+        b_easy.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    b_easy.startAnimation(scaleUp);
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    b_easy.startAnimation(scaleDown);
+                    showLevelImages(1);
+                }
+                return true;
+            }
+
+        });
+
+        b_normal.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    b_normal.startAnimation(scaleUp);
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    b_normal.startAnimation(scaleDown);
+                    showLevelImages(2);
+                }
+                return true;
+            }
+
+        });
+        b_hard.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    b_hard.startAnimation(scaleUp);
+                else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    b_hard.startAnimation(scaleDown);
+                    showLevelImages(3);
+                }
+                return true;
+            }
+
+        });
+        b_extreme.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    b_extreme.startAnimation(scaleUp);
+                else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    b_extreme.startAnimation(scaleDown);
+                    showLevelImages(4);
+                }
+                return true;
+            }
+
+        });
+        b_custom.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    b_custom.startAnimation(scaleUp);
+                else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    b_custom.startAnimation(scaleDown);
+                    Random r = new Random();
+                    int randImg = r.nextInt(100 - 1) + 1;
+                    AssetManager am;
+                    am = getAssets();
+
+                    try {
+                        Intent intent = new Intent(getApplicationContext(), PuzzleActivity.class);
+                        String[] files = am.list("img");
+                        files = Arrays.copyOfRange(files, randImg, randImg+1);
+
+                        intent.putExtra("assetName", files[0]);
+                        intent.putExtra("pieces", 20);
+                        intent.putExtra("rows", 5);
+                        intent.putExtra("columns", 4);
+                        intent.putExtra("lightning_mode", true);
+                        startActivity(intent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return true;
+            }
+
+        });
+        /*b_custom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Random r = new Random();
@@ -95,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
     }
 
     @Override

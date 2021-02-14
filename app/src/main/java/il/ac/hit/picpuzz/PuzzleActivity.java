@@ -46,6 +46,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private float ALPHA_VALUE = 0.3f;
     private ArrayList<PuzzlePiece> pieces;
     private boolean isChecked = false;
+    private boolean isMuteChecked = false;
     private boolean lightning_mode = false;
     private long lightning_time;
     private ImageView imageView;
@@ -218,7 +219,14 @@ public class PuzzleActivity extends AppCompatActivity {
 
             return true;
         } else if (item.getItemId() == R.id.checkable_mute) {
-            return true;
+                isMuteChecked = !item.isChecked();
+                item.setChecked(isMuteChecked);
+                if (isMuteChecked) {
+                    MusicManager.pause();
+                }
+                else
+                   MusicManager.start(this, MusicManager.MUSIC_MENU);
+                return true;
         } else if (item.getItemId() == R.id.reset_prog) {
             prefs.edit().clear().apply();
             return true;
