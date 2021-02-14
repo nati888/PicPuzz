@@ -45,12 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private Button b_custom;
     private Intent intent;
     private TextView highscore;
-    private boolean continueMusic = true;
 
     private Animation scaleUp;
     private Animation scaleDown;
-
-
 
     private String mCurrentPhotoPath;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         showProgress();
-
+        refreshMusic(false);
 
         b_easy.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -90,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
 
         b_normal.setOnTouchListener(new View.OnTouchListener() {
@@ -104,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
+
         b_hard.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -117,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
+
         b_extreme.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -130,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
+
         b_custom.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -161,49 +157,33 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
-        /*b_custom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Random r = new Random();
-                int randImg = r.nextInt(100 - 1) + 1;
-                AssetManager am;
-                am = getAssets();
-
-                try {
-                    Intent intent = new Intent(getApplicationContext(), PuzzleActivity.class);
-                    String[] files = am.list("img");
-                    files = Arrays.copyOfRange(files, randImg, randImg+1);
-
-                    intent.putExtra("assetName", files[0]);
-                    intent.putExtra("pieces", 20);
-                    intent.putExtra("rows", 5);
-                    intent.putExtra("columns", 4);
-                    intent.putExtra("lightning_mode", true);
-                    startActivity(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (!continueMusic) {
-            MusicManager.pause();
-        }
+        refreshMusic(true);
     }
-
 
     @Override
     protected void onResume() {
         super.onResume();
         showProgress();
-        continueMusic = false;
-        MusicManager.start(this, MusicManager.MUSIC_MENU);
+        refreshMusic(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        refreshMusic(false);
+    }
+
+    public void refreshMusic(boolean forceShutdown) {
+        if (prefs.getBoolean("musicOff", false) || forceShutdown)
+            MusicManager.pause();
+        else
+            MusicManager.start(this, MusicManager.MUSIC_MENU);
     }
 
     public void showProgress() {

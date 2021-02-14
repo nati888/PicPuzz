@@ -21,7 +21,7 @@ public class TouchListener implements View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch (View view, MotionEvent motionEvent) {
+    public boolean onTouch(View view, MotionEvent motionEvent) {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         final double tolerance = sqrt(pow(view.getWidth(), 2) + pow(view.getHeight(), 2)) / 10;

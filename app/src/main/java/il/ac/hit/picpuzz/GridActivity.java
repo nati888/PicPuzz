@@ -2,12 +2,11 @@ package il.ac.hit.picpuzz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -24,8 +23,6 @@ public class GridActivity extends AppCompatActivity {
     private String[] files;
     private AssetManager am;
     SharedPreferences prefs;
-    private boolean continueMusic = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +30,9 @@ public class GridActivity extends AppCompatActivity {
         setContentView(R.layout.activity_grid);
 
         grid = findViewById(R.id.grid);
+        prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         am = getAssets();
+        refreshMusic(false);
 
         try {
             files = am.list("img");
@@ -52,23 +51,6 @@ public class GridActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (!continueMusic) {
-            MusicManager.pause();
-        }
-    }
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == 4) {
-            continueMusic = true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     void prepareImages() throws IOException {
@@ -109,14 +91,34 @@ public class GridActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        refreshMusic(true);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        continueMusic = false;
-        MusicManager.start(this, MusicManager.MUSIC_MENU);
+
         try {
             prepareImages();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        refreshMusic(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        refreshMusic(false);
+    }
+
+    public void refreshMusic(boolean forceShutdown) {
+        if (prefs.getBoolean("musicOff", false) || forceShutdown)
+            MusicManager.pause();
+        else
+            MusicManager.start(this, MusicManager.MUSIC_MENU);
     }
 }

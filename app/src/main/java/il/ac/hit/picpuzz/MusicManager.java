@@ -2,7 +2,6 @@ package il.ac.hit.picpuzz;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.Collection;
@@ -148,4 +147,3 @@ public class MusicManager {
         Log.d(TAG, "Current music is now [" + currentMusic + "]");
     }
 }
-

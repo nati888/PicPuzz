@@ -22,8 +22,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,7 +52,6 @@ public class PuzzleActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private String mCurrentPhotoUri;
     private RelativeLayout layout;
-    private boolean continueMusic = true;
 
     private int piecesNum;
     private int rows;
@@ -84,6 +81,8 @@ public class PuzzleActivity extends AppCompatActivity {
         prefs = getSharedPreferences("APPLICATION_PREFERENCE", Context.MODE_PRIVATE);
         keyValues = getSharedPreferences("APPLICATION_PREFERENCE", MODE_PRIVATE).edit();
 
+        isMuteChecked = prefs.getBoolean("musicOff", false);
+        refreshMusic(false);
         // run image related code after the view was laid out
         // to have all dimensions calculated
         imageView.post(new Runnable() {
@@ -116,28 +115,6 @@ public class PuzzleActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (!continueMusic) {
-            MusicManager.pause();
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        continueMusic = false;
-        MusicManager.start(this, MusicManager.MUSIC_MENU);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == 4) {
-            continueMusic = true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void setPicFromPath(String mCurrentPhotoPath, ImageView imageView) {
@@ -200,6 +177,7 @@ public class PuzzleActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.checkable_background).setChecked(isChecked);
+        menu.findItem(R.id.checkable_mute).setChecked(isMuteChecked);
 
         if(lightning_mode)
             menu.findItem(R.id.checkable_background).setEnabled(false);
@@ -219,14 +197,19 @@ public class PuzzleActivity extends AppCompatActivity {
 
             return true;
         } else if (item.getItemId() == R.id.checkable_mute) {
-                isMuteChecked = !item.isChecked();
-                item.setChecked(isMuteChecked);
-                if (isMuteChecked) {
-                    MusicManager.pause();
-                }
-                else
-                   MusicManager.start(this, MusicManager.MUSIC_MENU);
-                return true;
+            isMuteChecked = !item.isChecked();
+            item.setChecked(isMuteChecked);
+
+            if (isMuteChecked) {
+                MusicManager.pause();
+                keyValues.putBoolean("musicOff", true);
+            } else {
+                MusicManager.start(this, MusicManager.MUSIC_MENU);
+                keyValues.putBoolean("musicOff", false);
+            }
+
+            keyValues.apply();
+            return true;
         } else if (item.getItemId() == R.id.reset_prog) {
             prefs.edit().clear().apply();
             return true;
@@ -486,12 +469,25 @@ public class PuzzleActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        refreshMusic(true);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshMusic(false);
+    }
+
     // make sure you want to exit dialog
     // Declare the onBackPressed method
     // when the back button is pressed
     // this method will call
     @Override
     public void onBackPressed() {
+        refreshMusic(false);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(PuzzleActivity.this);
         builder.setMessage(getResources().getString(R.string.exit_dialog_body));
         builder.setTitle(getResources().getString(R.string.exit_dialog_title));
@@ -502,5 +498,12 @@ public class PuzzleActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void refreshMusic(boolean forceShutdown) {
+        if (prefs.getBoolean("musicOff", false) || forceShutdown)
+            MusicManager.pause();
+        else
+            MusicManager.start(this, MusicManager.MUSIC_MENU);
     }
 }
